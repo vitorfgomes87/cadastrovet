@@ -624,43 +624,74 @@ aplicarMascaraTel(document.getElementById('telefone'));
 aplicarMascaraTel(document.getElementById('telefone2'));
 
 // ═══════════════════════════════════════════════════
-// CEP – MÁSCARA + BUSCA AUTOMÁTICA
-// ═══════════════════════════════════════════════════
+// ── CEP ─────────────────────────────────────────────
 document.getElementById('cep').addEventListener('input', function () {
-  let v = this.value.replace(/\D/g, '').substring(0, 8);
-  if (v.length > 5) v = v.replace(/(\d{5})(\d{1,3})/, '$1-$2');
-  this.value = v;
-
-  // Dispara busca quando tiver 8 dígitos
-  if (v.replace('-', '').length === 8) {
-    buscarCep(v.replace('-', ''));
+  let v = this.value.replace(/\D/g, '');
+  // Aplica máscara
+  if (v.length > 5) {
+    this.value = v.substring(0, 5) + '-' + v.substring(5, 8);
+  } else {
+    this.value = v;
+  }
+  // Busca quando tiver 8 dígitos
+  if (v.length === 8) {
+    buscarCep(v);
   }
 });
 
 async function buscarCep(cep) {
+  // Mostra feedback visual
+  const campoCep = document.getElementById('cep');
+  campoCep.style.background = '#fffde7';
+
   try {
-    const res  = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    // Usa HTTPS obrigatoriamente
+    const url = 'https://viacep.com.br/ws/' + cep + '/json/';
+    const res = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (!res.ok) {
+      showToast('Erro ao buscar CEP.', 'erro');
+      campoCep.style.background = '';
+      return;
+    }
+
     const data = await res.json();
 
     if (data.erro) {
       showToast('CEP não encontrado.', 'erro');
+      campoCep.style.background = '';
       return;
     }
 
     // Preenche os campos
-    document.getElementById('logradouro').value = data.logradouro || '';
-    document.getElementById('bairro').value     = data.bairro     || '';
-    document.getElementById('cidade').value     = data.localidade || '';
-    document.getElementById('estado').value     = data.uf         || '';
+    const preencher = (id, valor) => {
+      const el = document.getElementById(id);
+      if (el && valor) {
+        el.value = valor;
+        el.classList.remove('error');
+        const err = document.getElementById('err-' + id);
+        if (err) err.classList.remove('show');
+      }
+    };
 
-    // Limpa erros dos campos preenchidos
-    ['logradouro', 'bairro', 'cidade', 'estado', 'cep'].forEach(id => clearErr(id));
+    preencher('logradouro', data.logradouro);
+    preencher('bairro',     data.bairro);
+    preencher('cidade',     data.localidade);
+    preencher('estado',     data.uf);
+
+    campoCep.style.background = '#f1f8e9';
+    setTimeout(() => { campoCep.style.background = ''; }, 1500);
 
     // Foca no número
     document.getElementById('numero').focus();
 
   } catch (e) {
-    showToast('Erro ao buscar CEP. Verifique sua conexão.', 'erro');
+    showToast('Sem conexão ou erro ao buscar CEP.', 'erro');
+    campoCep.style.background = '';
   }
 }
 
