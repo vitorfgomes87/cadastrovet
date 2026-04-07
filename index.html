@@ -950,7 +950,7 @@ function removerPet(idx) {
 }
 
 function atualizarRacas(idx) {
-  var espécie      = document.getElementById('pet-espécie-' + idx).value;
+  var especie      = document.getElementById('pet-especie-' + idx).value;
   var racaWrapper  = document.getElementById('raca-wrapper-' + idx);
   var outroWrapper = document.getElementById('outro-wrapper-' + idx);
   var selectRaca   = document.getElementById('pet-raca-' + idx);
@@ -958,14 +958,12 @@ function atualizarRacas(idx) {
   racaWrapper.classList.remove('show');
   outroWrapper.classList.remove('show');
 
-  if (espécie === 'cão') {
+  if (especie === 'cao') {
     racaWrapper.classList.add('show');
     preencherSelect(selectRaca, racasCaes);
-  } else if (espécie === 'gato') {
+  } else if (especie === 'gato') {
     racaWrapper.classList.add('show');
     preencherSelect(selectRaca, racasGatos);
-  } else if (espécie === 'ave' || espécie === 'roedor' || espécie === 'reptil' || espécie === 'outro') {
-    outroWrapper.classList.add('show');
   }
 }
 
