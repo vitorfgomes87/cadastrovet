@@ -63,6 +63,10 @@
     }
     .error-msg { font-size: 12px; color: #e53935; display: none; margin-top: 2px; }
     .error-msg.show { display: block; }
+    .idade-hint {
+      font-size: 12px; color: #0d2b6e; margin-top: 4px;
+      font-style: italic; min-height: 16px;
+    }
     textarea { resize: vertical; min-height: 80px; }
     .radio-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
     .radio-label {
@@ -126,8 +130,8 @@
     <div class="logo">
       <img src="logounivet.png" alt="Univet Centro Veterinário 24h" style="height: 90px; width: auto;" />
     </div>
-    <h1>Univet Centro Veterinário 24h</h1>
-    <p>Informe seus dados e do Pet</p>
+    <h1>UniVET Centro Veterinário 24h</h1>
+    <p>Preencha seus dados e do Pet</p>
   </div>
 
   <div class="card">
@@ -267,7 +271,7 @@
 
         <div class="form-actions">
           <button type="button" class="btn-secondary" onclick="limparForm()">Limpar</button>
-          <button type="button" class="btn-primary" onclick="irParaPets()">Próximo: Meus Pets →</button>
+          <button type="button" class="btn-primary" onclick="irParaPets()">Próximo: Meu Pet →</button>
         </div>
       </div>
 
@@ -434,6 +438,38 @@ function buscarCep(cep) {
 }
 
 // =========================
+// IDADE → DATA DE NASCIMENTO
+// =========================
+function calcularNascimentoPet(idx) {
+  var anosEl  = document.getElementById('pet-anos-'  + idx);
+  var mesesEl = document.getElementById('pet-meses-' + idx);
+  var hintEl  = document.getElementById('pet-nasc-hint-' + idx);
+
+  if (!anosEl || !mesesEl || !hintEl) return '';
+
+  var anos  = parseInt(anosEl.value)  || 0;
+  var meses = parseInt(mesesEl.value) || 0;
+
+  if (anos === 0 && meses === 0) {
+    hintEl.textContent = '';
+    return '';
+  }
+
+  var hoje = new Date();
+  hoje.setFullYear(hoje.getFullYear() - anos);
+  hoje.setMonth(hoje.getMonth() - meses);
+
+  var dd  = String(hoje.getDate()).padStart(2, '0');
+  var mm  = String(hoje.getMonth() + 1).padStart(2, '0');
+  var aaaa = hoje.getFullYear();
+
+  var dataFormatada = dd + '/' + mm + '/' + aaaa;
+  hintEl.textContent = 'Nascimento aproximado: ' + dataFormatada;
+
+  return aaaa + '-' + mm + '-' + dd; // formato para salvar
+}
+
+// =========================
 // VALIDAÇÕES
 // =========================
 function setErr(fieldId, msgId, msg) {
@@ -568,13 +604,21 @@ function validarPets() {
       }
     });
 
-    var nascEl  = document.getElementById('pet-nasc-' + idx);
-    var nascErr = document.getElementById('err-pet-nasc-' + idx);
-    if (nascEl) nascEl.classList.remove('error');
-    if (nascErr) nascErr.classList.remove('show');
-    if (nascEl && !nascEl.value) {
-      nascEl.classList.add('error');
-      if (nascErr) { nascErr.textContent = 'Informe a data.'; nascErr.classList.add('show'); }
+    // Valida idade: anos ou meses deve ser maior que 0
+    var anosEl  = document.getElementById('pet-anos-'  + idx);
+    var mesesEl = document.getElementById('pet-meses-' + idx);
+    var anosErr = document.getElementById('err-pet-idade-' + idx);
+    var anos    = parseInt((anosEl  || {}).value) || 0;
+    var meses   = parseInt((mesesEl || {}).value) || 0;
+
+    if (anosEl) anosEl.classList.remove('error');
+    if (mesesEl) mesesEl.classList.remove('error');
+    if (anosErr) anosErr.classList.remove('show');
+
+    if (anos === 0 && meses === 0) {
+      if (anosEl)  anosEl.classList.add('error');
+      if (mesesEl) mesesEl.classList.add('error');
+      if (anosErr) { anosErr.textContent = 'Informe a idade do pet.'; anosErr.classList.add('show'); }
       ok = false;
     }
 
@@ -665,11 +709,17 @@ function coletarPets() {
     var idx      = card.id.replace('pet-card-', '');
     var especie  = (document.getElementById('pet-especie-' + idx) || {}).value || '';
     var castrado = document.querySelector('input[name="castrado-' + idx + '"]:checked');
+    var anos     = (document.getElementById('pet-anos-'  + idx) || {}).value || '0';
+    var meses    = (document.getElementById('pet-meses-' + idx) || {}).value || '0';
+    var nascCalc = calcularNascimentoPet(idx);
+
     pets.push({
       nome:       ((document.getElementById('pet-nome-'    + idx) || {}).value || '').trim(),
       especie:    especie,
       raca:       ((document.getElementById('pet-raca-'    + idx) || {}).value || ''),
-      nascimento: ((document.getElementById('pet-nasc-'    + idx) || {}).value || ''),
+      anos:       anos,
+      meses:      meses,
+      nascimento: nascCalc,
       sexo:       ((document.getElementById('pet-sexo-'    + idx) || {}).value || ''),
       cor:        ((document.getElementById('pet-cor-'     + idx) || {}).value || '').trim(),
       peso:       ((document.getElementById('pet-peso-'    + idx) || {}).value || ''),
@@ -716,14 +766,24 @@ function enviarFormulario() {
 
   var textoPets = '';
   pets.forEach(function(p, i) {
-    textoPets += 'PET ' + (i + 1) + ': ' + p.nome       + '\n';
-    textoPets += 'Especie: '              + p.especie    + '\n';
-    textoPets += 'Raca: '                 + (p.raca || '—') + '\n';
-    textoPets += 'Nascimento: '           + p.nascimento + '\n';
-    textoPets += 'Sexo: '                 + p.sexo       + '\n';
-    textoPets += 'Cor/Pelagem: '          + p.cor        + '\n';
-    textoPets += 'Peso: '                 + p.peso + ' kg' + '\n';
-    textoPets += 'Castrado(a): '          + p.castrado   + '\n\n';
+    var idadeTexto = '';
+    if (parseInt(p.anos) > 0 && parseInt(p.meses) > 0) {
+      idadeTexto = p.anos + ' ano(s) e ' + p.meses + ' mes(es)';
+    } else if (parseInt(p.anos) > 0) {
+      idadeTexto = p.anos + ' ano(s)';
+    } else {
+      idadeTexto = p.meses + ' mes(es)';
+    }
+
+    textoPets += 'PET ' + (i + 1) + ': ' + p.nome            + '\n';
+    textoPets += 'Especie: '              + p.especie         + '\n';
+    textoPets += 'Raca: '                 + (p.raca || '—')   + '\n';
+    textoPets += 'Idade: '                + idadeTexto        + '\n';
+    textoPets += 'Nascimento aprox.: '    + (p.nascimento ? p.nascimento.split('-').reverse().join('/') : '—') + '\n';
+    textoPets += 'Sexo: '                 + p.sexo            + '\n';
+    textoPets += 'Cor/Pelagem: '          + p.cor             + '\n';
+    textoPets += 'Peso: '                 + p.peso + ' kg'    + '\n';
+    textoPets += 'Castrado(a): '          + p.castrado        + '\n\n';
   });
 
   document.getElementById('dadosTutor').value = textoTutor;
@@ -820,7 +880,7 @@ function adicionarPet() {
 
   html += '<div class="field">';
   html += '<label>Nome do pet <span class="required">*</span></label>';
-  html += '<input type="text" id="pet-nome-' + idx + '" placeholder="Nome" />';
+  html += '<input type="text" id="pet-nome-' + idx + '" placeholder="Como você chama?" />';
   html += '<span class="error-msg" id="err-pet-nome-' + idx + '">Informe o nome do pet.</span>';
   html += '</div>';
 
@@ -840,10 +900,19 @@ function adicionarPet() {
   html += '<span class="error-msg" id="err-pet-raca-' + idx + '">Selecione a raça.</span>';
   html += '</div>';
 
+  // CAMPO IDADE (anos + meses) com hint de nascimento
   html += '<div class="field">';
-  html += '<label>Data de nascimento <span class="required">*</span></label>';
-  html += '<input type="date" id="pet-nasc-' + idx + '" />';
-  html += '<span class="error-msg" id="err-pet-nasc-' + idx + '">Informe a data.</span>';
+  html += '<label>Idade <span class="required">*</span></label>';
+  html += '<div style="display:flex; gap:8px;">';
+  html += '  <div style="flex:1;">';
+  html += '    <input type="number" id="pet-anos-' + idx + '" placeholder="Anos" min="0" max="30" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
+  html += '  </div>';
+  html += '  <div style="flex:1;">';
+  html += '    <input type="number" id="pet-meses-' + idx + '" placeholder="Meses" min="0" max="11" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
+  html += '  </div>';
+  html += '</div>';
+  html += '<div class="idade-hint" id="pet-nasc-hint-' + idx + '"></div>';
+  html += '<span class="error-msg" id="err-pet-idade-' + idx + '">Informe a idade do pet.</span>';
   html += '</div>';
 
   html += '<div class="field">';
@@ -864,7 +933,7 @@ function adicionarPet() {
   html += '</div>';
 
   html += '<div class="field">';
-  html += '<label>Pese o pet na balança e registre aqui (kg): <span class="required">*</span></label>';
+  html += '<label>Peso aproximado (kg) <span class="required">*</span></label>';
   html += '<input type="number" id="pet-peso-' + idx + '" placeholder="0.0" min="0.1" step="0.1" />';
   html += '<span class="error-msg" id="err-pet-peso-' + idx + '">Informe o peso.</span>';
   html += '</div>';
@@ -978,7 +1047,9 @@ function carregarEstado() {
         setValPet('pet-especie-', p.especie);
         atualizarRacas(idx);
         setValPet('pet-raca-',    p.raca);
-        setValPet('pet-nasc-',    p.nascimento);
+        setValPet('pet-anos-',    p.anos);
+        setValPet('pet-meses-',   p.meses);
+        calcularNascimentoPet(idx);
         setValPet('pet-sexo-',    p.sexo);
         setValPet('pet-cor-',     p.cor);
         setValPet('pet-peso-',    p.peso);
