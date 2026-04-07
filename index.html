@@ -664,7 +664,6 @@ function coletarPets() {
       nome:         ((document.getElementById('pet-nome-' + idx)        || {}).value || '').trim(),
       espécie:      espécie,
       raca:         ((document.getElementById('pet-raca-' + idx)        || {}).value || ''),
-      outroespécie: ((document.getElementById('pet-outro-' + idx)       || {}).value || '').trim(),
       nascimento:   ((document.getElementById('pet-nasc-' + idx)        || {}).value || ''),
       sexo:         ((document.getElementById('pet-sexo-' + idx)        || {}).value || ''),
       cor:          ((document.getElementById('pet-cor-' + idx)         || {}).value || '').trim(),
@@ -717,7 +716,7 @@ function enviarFormulario() {
   pets.forEach(function(p, i) {
     textoPets += 'PET ' + (i+1) + ': ' + p.nome + '\n';
     textoPets += 'espécie: '     + p.espécie                          + '\n';
-    textoPets += 'Raca: '        + (p.raca || p.outroespécie || '—')  + '\n';
+    textoPets += 'Raca: '        + (p.raca || '—')  + '\n';
     textoPets += 'Nascimento: '  + p.nascimento                       + '\n';
     textoPets += 'Sexo: '        + p.sexo                             + '\n';
     textoPets += 'Cor/Pelagem: ' + p.cor                              + '\n';
@@ -861,7 +860,7 @@ html += '  </select>';
   html += '    <option value="">Selecione...</option>';
   html += '    <option>Macho</option>';
   html += '    <option>Fêmea</option>';
-  html += '    <option>Nao identificado</option>';
+  html += '    <option>Não identificado</option>';
   html += '  </select>';
   html += '  <span class="error-msg" id="err-pet-sexo-' + idx + '">Selecione o sexo.</span>';
   html += '</div>';
@@ -890,20 +889,6 @@ html += '  </select>';
   html += '    <label class="radio-label"><input type="radio" name="castrado-' + idx + '" value="Nao sei"> Nao sei</label>';
   html += '  </div>';
   html += '  <span class="error-msg" id="err-castrado-' + idx + '">Selecione uma opção.</span>';
-  html += '</div>';
-
-  html += '<div class="grid-2">';
-  html += '  <div class="field">';
-  html += '    <label>Possui microchip?</label>';
-  html += '    <div class="radio-group">';
-  html += '      <label class="radio-label"><input type="radio" name="chip-' + idx + '" value="Sim" onclick="toggleChip(' + idx + ',true)"> Sim</label>';
-  html += '      <label class="radio-label"><input type="radio" name="chip-' + idx + '" value="Nao" onclick="toggleChip(' + idx + ',false)"> Nao</label>';
-  html += '    </div>';
-  html += '  </div>';
-  html += '  <div class="field" id="chip-num-wrapper-' + idx + '" style="display:none;">';
-  html += '    <label>Numero do microchip</label>';
-  html += '    <input type="text" id="pet-chip-' + idx + '" placeholder="000.000.000.000.000" />';
-  html += '  </div>';
   html += '</div>';
 
   html += '<div style="margin-top:16px;"></div>';
@@ -1046,15 +1031,10 @@ function carregarEstado() {
         atualizarRacas(idx); // mostra raca/outro conforme especie
 
         setValPet('pet-raca-',         p.raca);
-        setValPet('pet-outro-',        p.outroEspecie);
         setValPet('pet-nasc-',         p.nascimento);
         setValPet('pet-sexo-',         p.sexo);
         setValPet('pet-cor-',          p.cor);
-        setValPet('pet-peso-',         p.peso);
-        setValPet('pet-chip-',         p.chipNumero);
-        setValPet('pet-historico-',    p.historico);
-        setValPet('pet-medicamentos-', p.medicamentos);
-        setValPet('pet-obs-',          p.obs);
+        
 
         // Castrado
         if (p.castrado) {
@@ -1062,20 +1042,6 @@ function carregarEstado() {
           if (r1) r1.checked = true;
         }
 
-        // Microchip
-        if (p.chip) {
-          var r2 = document.querySelector('input[name="chip-' + idx + '"][value="' + p.chip + '"]');
-          if (r2) {
-            r2.checked = true;
-            toggleChip(idx, p.chip === 'Sim');
-          }
-        }
-
-        // Vacinas
-        if (p.vacinas) {
-          var r3 = document.querySelector('input[name="vacinas-' + idx + '"][value="' + p.vacinas + '"]');
-          if (r3) r3.checked = true;
-        }
       });
     }
   } catch (e) {
