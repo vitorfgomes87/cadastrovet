@@ -562,7 +562,7 @@ function validarPets() {
     }
 
     var selects2 = [
-      { id: 'pet-especie-' + idx, msg: 'Selecione a especie.' },
+      { id: 'pet-espécie-' + idx, msg: 'Selecione a espécie.' },
       { id: 'pet-sexo-'    + idx, msg: 'Selecione o sexo.' }
     ];
 
@@ -588,9 +588,9 @@ function validarPets() {
       ok = false;
     }
 
-    var especie = (document.getElementById('pet-especie-' + idx) || {}).value || '';
+    var espécie = (document.getElementById('pet-espécie-' + idx) || {}).value || '';
 
-    if (especie === 'cao' || especie === 'gato') {
+    if (espécie === 'cao' || espécie === 'gato') {
       var racaEl  = document.getElementById('pet-raca-' + idx);
       var racaErr = document.getElementById('err-pet-raca-' + idx);
       if (racaEl) racaEl.classList.remove('error');
@@ -602,14 +602,14 @@ function validarPets() {
       }
     }
 
-    if (especie === 'ave' || especie === 'roedor' || especie === 'reptil' || especie === 'outro') {
+    if (espécie === 'ave' || espécie === 'roedor' || espécie === 'reptil' || espécie === 'outro') {
       var outroEl  = document.getElementById('pet-outro-' + idx);
       var outroErr = document.getElementById('err-pet-outro-' + idx);
       if (outroEl) outroEl.classList.remove('error');
       if (outroErr) outroErr.classList.remove('show');
       if (outroEl && !(outroEl.value || '').trim()) {
         outroEl.classList.add('error');
-        if (outroErr) { outroErr.textContent = 'Descreva a especie/raca.'; outroErr.classList.add('show'); }
+        if (outroErr) { outroErr.textContent = 'Descreva a espécie/raca.'; outroErr.classList.add('show'); }
         ok = false;
       }
     }
@@ -656,15 +656,15 @@ function coletarPets() {
   var pets = [];
   document.querySelectorAll('.pet-card').forEach(function(card) {
     var idx     = card.id.replace('pet-card-', '');
-    var especie = (document.getElementById('pet-especie-' + idx) || {}).value || '';
+    var espécie = (document.getElementById('pet-espécie-' + idx) || {}).value || '';
     var castrado = document.querySelector('input[name="castrado-' + idx + '"]:checked');
     var chip     = document.querySelector('input[name="chip-' + idx + '"]:checked');
     var vacinas  = document.querySelector('input[name="vacinas-' + idx + '"]:checked');
     pets.push({
       nome:         ((document.getElementById('pet-nome-' + idx)        || {}).value || '').trim(),
-      especie:      especie,
+      espécie:      espécie,
       raca:         ((document.getElementById('pet-raca-' + idx)        || {}).value || ''),
-      outroEspecie: ((document.getElementById('pet-outro-' + idx)       || {}).value || '').trim(),
+      outroespécie: ((document.getElementById('pet-outro-' + idx)       || {}).value || '').trim(),
       nascimento:   ((document.getElementById('pet-nasc-' + idx)        || {}).value || ''),
       sexo:         ((document.getElementById('pet-sexo-' + idx)        || {}).value || ''),
       cor:          ((document.getElementById('pet-cor-' + idx)         || {}).value || '').trim(),
@@ -716,8 +716,8 @@ function enviarFormulario() {
   var textoPets = '';
   pets.forEach(function(p, i) {
     textoPets += 'PET ' + (i+1) + ': ' + p.nome + '\n';
-    textoPets += 'Especie: '     + p.especie                          + '\n';
-    textoPets += 'Raca: '        + (p.raca || p.outroEspecie || '—')  + '\n';
+    textoPets += 'espécie: '     + p.espécie                          + '\n';
+    textoPets += 'Raca: '        + (p.raca || p.outroespécie || '—')  + '\n';
     textoPets += 'Nascimento: '  + p.nascimento                       + '\n';
     textoPets += 'Sexo: '        + p.sexo                             + '\n';
     textoPets += 'Cor/Pelagem: ' + p.cor                              + '\n';
@@ -824,8 +824,8 @@ html += '</div>';
   html += '</div>';
 
   html += '<div class="field">';
-  html += '  <label>Especie <span class="required">*</span></label>';
-  html += '  <select id="pet-especie-' + idx + '" onchange="atualizarRacas(' + idx + ')">';
+  html += '  <label>espécie <span class="required">*</span></label>';
+  html += '  <select id="pet-espécie-' + idx + '" onchange="atualizarRacas(' + idx + ')">';
   html += '    <option value="">Selecione...</option>';
   html += '    <option value="cao">Cao</option>';
   html += '    <option value="gato">Gato</option>';
@@ -834,19 +834,19 @@ html += '</div>';
   html += '    <option value="reptil">Reptil</option>';
   html += '    <option value="outro">Outro</option>';
   html += '  </select>';
-  html += '  <span class="error-msg" id="err-pet-especie-' + idx + '">Selecione a especie.</span>';
+  html += '  <span class="error-msg" id="err-pet-espécie-' + idx + '">Selecione a espécie.</span>';
   html += '</div>';
 
   html += '<div class="field racas-container" id="raca-wrapper-' + idx + '">';
   html += '  <label>Raca <span class="required">*</span></label>';
-  html += '  <select id="pet-raca-' + idx + '"><option value="">Selecione a especie primeiro</option></select>';
+  html += '  <select id="pet-raca-' + idx + '"><option value="">Selecione a espécie primeiro</option></select>';
   html += '  <span class="error-msg" id="err-pet-raca-' + idx + '">Selecione a raca.</span>';
   html += '</div>';
 
   html += '<div class="field racas-container" id="outro-wrapper-' + idx + '">';
-  html += '  <label>Descreva a especie/raca <span class="required">*</span></label>';
+  html += '  <label>Descreva a espécie/raca <span class="required">*</span></label>';
   html += '  <input type="text" id="pet-outro-' + idx + '" placeholder="Ex: Calopsita, Hamster..." />';
-  html += '  <span class="error-msg" id="err-pet-outro-' + idx + '">Descreva a especie/raca.</span>';
+  html += '  <span class="error-msg" id="err-pet-outro-' + idx + '">Descreva a espécie/raca.</span>';
   html += '</div>';
 
   html += '<div class="field">';
@@ -944,7 +944,7 @@ function removerPet(idx) {
 }
 
 function atualizarRacas(idx) {
-  var especie      = document.getElementById('pet-especie-' + idx).value;
+  var espécie      = document.getElementById('pet-espécie-' + idx).value;
   var racaWrapper  = document.getElementById('raca-wrapper-' + idx);
   var outroWrapper = document.getElementById('outro-wrapper-' + idx);
   var selectRaca   = document.getElementById('pet-raca-' + idx);
@@ -952,13 +952,13 @@ function atualizarRacas(idx) {
   racaWrapper.classList.remove('show');
   outroWrapper.classList.remove('show');
 
-  if (especie === 'cao') {
+  if (espécie === 'cao') {
     racaWrapper.classList.add('show');
     preencherSelect(selectRaca, racasCaes);
-  } else if (especie === 'gato') {
+  } else if (espécie === 'gato') {
     racaWrapper.classList.add('show');
     preencherSelect(selectRaca, racasGatos);
-  } else if (especie === 'ave' || especie === 'roedor' || especie === 'reptil' || especie === 'outro') {
+  } else if (espécie === 'ave' || espécie === 'roedor' || espécie === 'reptil' || espécie === 'outro') {
     outroWrapper.classList.add('show');
   }
 }
