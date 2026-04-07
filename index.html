@@ -645,7 +645,7 @@ function validarPets() {
     if (pesoErr) pesoErr.classList.remove('show');
     if (pesoEl && (!pesoEl.value || parseFloat(pesoEl.value) <= 0)) {
       pesoEl.classList.add('error');
-      if (pesoErr) { pesoErr.textContent = 'Informe o peso.'; pesoErr.classList.add('show'); }
+      if (pesoErr) { pesoErr.textContent = 'Pese o Pet na balança e registre aqui (kg):'; pesoErr.classList.add('show'); }
       ok = false;
     }
 
