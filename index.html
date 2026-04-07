@@ -590,7 +590,7 @@ function validarPets() {
 
     var espécie = (document.getElementById('pet-espécie-' + idx) || {}).value || '';
 
-    if (espécie === 'cao' || espécie === 'gato') {
+    if (espécie === 'cão' || espécie === 'gato') {
       var racaEl  = document.getElementById('pet-raca-' + idx);
       var racaErr = document.getElementById('err-pet-raca-' + idx);
       if (racaEl) racaEl.classList.remove('error');
@@ -870,7 +870,7 @@ html += '</div>';
   html += '  <select id="pet-sexo-' + idx + '">';
   html += '    <option value="">Selecione...</option>';
   html += '    <option>Macho</option>';
-  html += '    <option>Femea</option>';
+  html += '    <option>Fêmea</option>';
   html += '    <option>Nao identificado</option>';
   html += '  </select>';
   html += '  <span class="error-msg" id="err-pet-sexo-' + idx + '">Selecione o sexo.</span>';
@@ -899,7 +899,7 @@ html += '</div>';
   html += '    <label class="radio-label"><input type="radio" name="castrado-' + idx + '" value="Nao"> Nao</label>';
   html += '    <label class="radio-label"><input type="radio" name="castrado-' + idx + '" value="Nao sei"> Nao sei</label>';
   html += '  </div>';
-  html += '  <span class="error-msg" id="err-castrado-' + idx + '">Selecione uma opcao.</span>';
+  html += '  <span class="error-msg" id="err-castrado-' + idx + '">Selecione uma opção.</span>';
   html += '</div>';
 
   html += '<div class="grid-2">';
@@ -936,7 +936,7 @@ html += '</div>';
   html += '    <label class="radio-label"><input type="radio" name="vacinas-' + idx + '" value="Parcialmente"> Parcialmente</label>';
   html += '    <label class="radio-label"><input type="radio" name="vacinas-' + idx + '" value="Nao sei"> Nao sei</label>';
   html += '  </div>';
-  html += '  <span class="error-msg" id="err-vacinas-' + idx + '">Selecione uma opcao.</span>';
+  html += '  <span class="error-msg" id="err-vacinas-' + idx + '">Selecione uma opção.</span>';
   html += '</div>';
 
   html += '<div class="field" style="margin-top:16px;">';
@@ -962,7 +962,7 @@ function atualizarRacas(idx) {
   racaWrapper.classList.remove('show');
   outroWrapper.classList.remove('show');
 
-  if (espécie === 'cao') {
+  if (espécie === 'cão') {
     racaWrapper.classList.add('show');
     preencherSelect(selectRaca, racasCaes);
   } else if (espécie === 'gato') {
