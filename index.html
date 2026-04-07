@@ -8,14 +8,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+      background: linear-gradient(135deg, #e8eef8 0%, #e3f2fd 100%);
       min-height: 100vh;
       padding: 30px 16px;
     }
     .container { max-width: 760px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 32px; }
     .header .logo { font-size: 48px; margin-bottom: 8px; }
-    .header h1 { font-size: 26px; color: #1b5e20; font-weight: 700; }
+    .header h1 { font-size: 26px; color: #0d1b4b; font-weight: 700; }
     .header p { color: #555; font-size: 14px; margin-top: 4px; }
     .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); overflow: hidden; }
     .tabs { display: flex; border-bottom: 2px solid #e0e0e0; background: #f9f9f9; }
@@ -26,7 +26,7 @@
       border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s;
     }
     .tab-btn:hover { background: #f0f0f0; color: #333; }
-    .tab-btn.active { color: #2e7d32; border-bottom-color: #2e7d32; background: #fff; }
+    .tab-btn.active { color: #0d2b6e; border-bottom-color: #0d2b6e; background: #fff; }
     .tab-icon { font-size: 20px; }
     .tab-content { display: none; padding: 32px; animation: fadeIn 0.3s ease; }
     .tab-content.active { display: block; }
@@ -35,8 +35,8 @@
     .aviso-obrigatorio span { color: #e53935; font-weight: 700; }
     .section-title {
       font-size: 13px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1px; color: #2e7d32; margin-bottom: 16px;
-      padding-bottom: 8px; border-bottom: 1px solid #e8f5e9;
+      letter-spacing: 1px; color: #0d2b6e; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #e8eef8;
     }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
@@ -53,7 +53,7 @@
       background: #fafafa; font-family: inherit;
     }
     input:focus, select:focus, textarea:focus {
-      outline: none; border-color: #2e7d32;
+      outline: none; border-color: #0d2b6e;
       box-shadow: 0 0 0 3px rgba(46,125,50,0.12); background: #fff;
     }
     input.error, select.error, textarea.error {
@@ -69,8 +69,8 @@
       font-weight: 400; color: #333; cursor: pointer; padding: 7px 14px;
       border: 1.5px solid #ccc; border-radius: 24px; transition: all 0.2s; user-select: none;
     }
-    .radio-label:hover { border-color: #2e7d32; background: #f1f8e9; }
-    input[type="radio"] { accent-color: #2e7d32; width: 15px; height: 15px; }
+    .radio-label:hover { border-color: #0d2b6e; background: #eef2fb; }
+    input[type="radio"] { accent-color: #0d2b6e; width: 15px; height: 15px; }
     .radio-group.error .radio-label { border-color: #e53935 !important; background-color: #fff8f8 !important; }
     .pet-card { border: 1.5px solid #e0e0e0; border-radius: 12px; padding: 24px; margin-bottom: 20px; background: #fafafa; }
     .pet-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -80,21 +80,21 @@
     .racas-container { display: none; }
     .racas-container.show { display: block; }
     .btn-add-pet {
-      width: 100%; padding: 13px; border: 2px dashed #81c784;
-      border-radius: 10px; background: #f1f8e9; color: #2e7d32;
+      width: 100%; padding: 13px; border: 2px dashed #7a9fd4;
+      border-radius: 10px; background: #eef2fb; color: #0d2b6e;
       font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-bottom: 8px;
     }
-    .btn-add-pet:hover { background: #c8e6c9; border-color: #2e7d32; }
+    .btn-add-pet:hover { background: #c5d3f0; border-color: #0d2b6e; }
     .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; }
     .btn-secondary { padding: 12px 24px; border: 1.5px solid #ccc; border-radius: 10px; background: #fff; color: #555; font-size: 15px; font-weight: 600; cursor: pointer; }
     .btn-secondary:hover { background: #f5f5f5; }
     .btn-primary {
       padding: 12px 32px; border: none; border-radius: 10px;
-      background: linear-gradient(135deg, #2e7d32, #43a047); color: #fff;
+      background: linear-gradient(135deg, #0d2b6e, #1a3d8f); color: #fff;
       font-size: 15px; font-weight: 700; cursor: pointer;
       box-shadow: 0 2px 8px rgba(46,125,50,0.25); transition: all 0.2s;
     }
-    .btn-primary:hover { background: linear-gradient(135deg, #1b5e20, #2e7d32); transform: translateY(-1px); }
+    .btn-primary:hover { background: linear-gradient(135deg, #0d1b4b, #0d2b6e); transform: translateY(-1px); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .alert-error {
       background: #ffebee; border: 1.5px solid #ef9a9a; border-radius: 8px;
@@ -105,11 +105,11 @@
     #tela-sucesso { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 60px 32px; text-align: center; gap: 16px; }
     #tela-sucesso.show { display: flex; }
     #tela-sucesso .icone { font-size: 64px; }
-    #tela-sucesso h2 { font-size: 22px; color: #2e7d32; font-weight: 700; }
+    #tela-sucesso h2 { font-size: 22px; color: #0d2b6e; font-weight: 700; }
     #tela-sucesso p { font-size: 15px; color: #555; max-width: 420px; line-height: 1.6; }
-    #tela-sucesso button { margin-top: 12px; padding: 12px 28px; background: linear-gradient(135deg, #2e7d32, #43a047); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+    #tela-sucesso button { margin-top: 12px; padding: 12px 28px; background: linear-gradient(135deg, #0d2b6e, #1a3d8f); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
     #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); color: #fff; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: transform 0.4s ease; z-index: 999; white-space: nowrap; }
-    #toast.sucesso { background: #2e7d32; }
+    #toast.sucesso { background: #0d2b6e; }
     #toast.erro { background: #c62828; }
     #toast.show { transform: translateX(-50%) translateY(0); }
     @media (max-width: 560px) {
