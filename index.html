@@ -303,24 +303,35 @@
 // =========================
 // LISTAS DE RAÇAS
 // =========================
-var racasCaes = [
-  "SRD (Vira-lata)","Labrador Retriever","Golden Retriever","Bulldog Inglês",
-  "Bulldog Francês","Pastor Alemão","Poodle","Shih Tzu","Yorkshire Terrier",
-  "Beagle","Lhasa Apso","Maltês","Dachshund (Salsicha)","Pinscher","Chihuahua",
-  "Bichon Frisé","Cocker Spaniel","Boxer","Rottweiler","Husky Siberiano","Akita",
-  "Dálmata","Dobermann","Border Collie","Australian Shepherd","Chow Chow","Shar-Pei",
-  "Spitz Alemão (Lulu da Pomerana)","Schnauzer","Weimaraner","São Bernardo","Mastiff",
-  "Greyhound","Basset Hound","Shiba Inu","Pitbull","American Bully","Whippet",
-  "Staffordshire Bull Terrier","Jack Russell Terrier","Cavalier King Charles Spaniel"
-].sort();
+// Listas com SRD sempre em primeiro
+var racasCaes = (function() {
+  var lista = [
+    "Labrador Retriever","Golden Retriever","Bulldog Ingles",
+    "Bulldog Frances","Pastor Alemao","Poodle","Shih Tzu","Yorkshire Terrier",
+    "Beagle","Lhasa Apso","Maltes","Dachshund (Salsicha)","Pinscher","Chihuahua",
+    "Bichon Frise","Cocker Spaniel","Boxer","Rottweiler","Husky Siberiano","Akita",
+    "Dalmata","Dobermann","Border Collie","Australian Shepherd","Chow Chow","Shar-Pei",
+    "Spitz Alemao (Lulu da Pomerana)","Schnauzer","Weimaraner","Sao Bernardo","Mastiff",
+    "Greyhound","Basset Hound","Shiba Inu","Pitbull","American Bully",
+    "Staffordshire Bull Terrier","Jack Russell Terrier","Cavalier King Charles Spaniel"
+  ];
+  lista.sort();
+  lista.unshift("SRD (Sem raça definida)");
+  return lista;
+})();
 
-var racasGatos = [
-  "SRD (Vira-lata)","Persa","Siames","Maine Coon","Ragdoll","Bengal",
-  "British Shorthair","Abissinio","Scottish Fold","Sphynx (Pelado)","Angora Turco",
-  "Birmanes","Burmes","Russian Blue","Norwegian Forest","Savannah","Tonkines",
-  "Devon Rex","Cornish Rex","Munchkin","Balines","Somali","Ocicat",
-  "Egyptian Mau","Chartreux","Manx"
-].sort();
+var racasGatos = (function() {
+  var lista = [
+    "Persa","Siames","Maine Coon","Ragdoll","Bengal",
+    "British Shorthair","Abissinio","Scottish Fold","Sphynx (Pelado)","Angora Turco",
+    "Birmanes","Burmes","Russian Blue","Norwegian Forest","Savannah","Tonkines",
+    "Devon Rex","Cornish Rex","Munchkin","Balines","Somali","Ocicat",
+    "Egyptian Mau","Chartreux","Manx"
+  ];
+  lista.sort();
+  lista.unshift("SRD (Sem raça definida)");
+  return lista;
+})();
 
 // =========================
 // ABAS
