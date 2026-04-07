@@ -820,7 +820,7 @@ function adicionarPet() {
 
   html += '<div class="field">';
   html += '<label>Nome do pet <span class="required">*</span></label>';
-  html += '<input type="text" id="pet-nome-' + idx + '" placeholder="Como você chama?" />';
+  html += '<input type="text" id="pet-nome-' + idx + '" placeholder="Nome" />';
   html += '<span class="error-msg" id="err-pet-nome-' + idx + '">Informe o nome do pet.</span>';
   html += '</div>';
 
@@ -864,7 +864,7 @@ function adicionarPet() {
   html += '</div>';
 
   html += '<div class="field">';
-  html += '<label>Peso aproximado (kg) <span class="required">*</span></label>';
+  html += '<label>Pese o pet na balança e registre aqui (kg): <span class="required">*</span></label>';
   html += '<input type="number" id="pet-peso-' + idx + '" placeholder="0.0" min="0.1" step="0.1" />';
   html += '<span class="error-msg" id="err-pet-peso-' + idx + '">Informe o peso.</span>';
   html += '</div>';
