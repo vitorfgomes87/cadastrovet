@@ -761,6 +761,16 @@ function enviarFormulario() {
 
 function novoCadastro() {
   document.getElementById('mainForm').reset();
+  function novoCadastro() {
+  document.getElementById('mainForm').reset();
+
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) {}
+
+  document.querySelectorAll('.error').forEach(function(el) { el.classList.remove('error'); });
+  ...
+}
   document.querySelectorAll('.error').forEach(function(el) { el.classList.remove('error'); });
   document.querySelectorAll('.error-msg.show').forEach(function(el) { el.classList.remove('show'); });
   document.getElementById('alert-tutor').classList.remove('show');
@@ -977,7 +987,131 @@ function toggleChip(idx, show) {
   var el = document.getElementById('chip-num-wrapper-' + idx);
   if (el) el.style.display = show ? 'block' : 'none';
 }
+// ==== SALVAR E CARREGAR DADOS (localStorage) ====
 
+// Chave usada no navegador
+var STORAGE_KEY = 'cadastrovet_dados';
+
+// Salva tudo: tutor + pets
+function salvarEstado() {
+  try {
+    var tutor = coletarTutor();
+    var pets  = coletarPets();
+    var dados = { tutor: tutor, pets: pets };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+  } catch (e) {
+    // Se o navegador não suportar localStorage, apenas ignora
+  }
+}
+
+// Carrega dados salvos (se existirem) e preenche o formulário
+function carregarEstado() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+
+    var dados = JSON.parse(raw);
+    if (!dados || !dados.tutor) return;
+
+    // --- Preenche tutor ---
+    var t = dados.tutor;
+    var setVal = function(id, valor) {
+      var el = document.getElementById(id);
+      if (el && typeof valor === 'string') el.value = valor;
+    };
+
+    setVal('nome',        t.nome);
+    setVal('cpf',         t.cpf);
+    setVal('rg',          t.rg);
+    document.getElementById('nascimento').value = t.nascimento || '';
+    document.getElementById('genero').value     = t.genero     || '';
+    setVal('email',       t.email);
+    setVal('telefone',    t.telefone);
+    setVal('telefone2',   t.telefone2);
+    setVal('cep',         t.cep);
+    setVal('logradouro',  t.logradouro);
+    setVal('numero',      t.numero);
+    setVal('complemento', t.complemento);
+    setVal('bairro',      t.bairro);
+    setVal('cidade',      t.cidade);
+    document.getElementById('estado').value = t.estado || '';
+    document.getElementById('origem').value = t.origem || '';
+
+    // --- Preenche pets ---
+    if (dados.pets && dados.pets.length) {
+      // Zera container e contador
+      document.getElementById('pets-container').innerHTML = '';
+      petCount = 0;
+
+      dados.pets.forEach(function(p, index) {
+        adicionarPet(); // cria card
+        var idx = index + 1;
+
+        var setValPet = function(idBase, valor) {
+          var el = document.getElementById(idBase + idx);
+          if (el && typeof valor === 'string') el.value = valor;
+        };
+
+        setValPet('pet-nome-',         p.nome);
+        setValPet('pet-especie-',      p.especie);
+        atualizarRacas(idx); // mostra raca/outro conforme especie
+
+        setValPet('pet-raca-',         p.raca);
+        setValPet('pet-outro-',        p.outroEspecie);
+        setValPet('pet-nasc-',         p.nascimento);
+        setValPet('pet-sexo-',         p.sexo);
+        setValPet('pet-cor-',          p.cor);
+        setValPet('pet-peso-',         p.peso);
+        setValPet('pet-chip-',         p.chipNumero);
+        setValPet('pet-historico-',    p.historico);
+        setValPet('pet-medicamentos-', p.medicamentos);
+        setValPet('pet-obs-',          p.obs);
+
+        // Castrado
+        if (p.castrado) {
+          var r1 = document.querySelector('input[name="castrado-' + idx + '"][value="' + p.castrado + '"]');
+          if (r1) r1.checked = true;
+        }
+
+        // Microchip
+        if (p.chip) {
+          var r2 = document.querySelector('input[name="chip-' + idx + '"][value="' + p.chip + '"]');
+          if (r2) {
+            r2.checked = true;
+            toggleChip(idx, p.chip === 'Sim');
+          }
+        }
+
+        // Vacinas
+        if (p.vacinas) {
+          var r3 = document.querySelector('input[name="vacinas-' + idx + '"][value="' + p.vacinas + '"]');
+          if (r3) r3.checked = true;
+        }
+      });
+    }
+  } catch (e) {
+    // Se der erro, não faz nada
+  }
+}
+
+// Adiciona eventos de salvamento automático
+function habilitarAutoSalvar() {
+  try {
+    var form = document.getElementById('mainForm');
+    if (!form) return;
+
+    // Salvar ao sair de qualquer campo (blur) e ao digitar (input)
+    form.addEventListener('input', function() {
+      salvarEstado();
+    });
+    form.addEventListener('change', function() {
+      salvarEstado();
+    });
+  } catch (e) {}
+}
+carregarEstado();
+habilitarAutoSalvar();
 adicionarPet();
 </script>
 </body>
