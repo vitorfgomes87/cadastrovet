@@ -799,12 +799,21 @@ function adicionarPet() {
   div.id = 'pet-card-' + idx;
 
   var html = '';
-  html += '<div class="pet-card-header">';
+ html += '<div class="pet-card-header">';
+
+// se for o primeiro, mostra "Dados do Pet"; senão, "Pet X"
+if (idx === 1) {
+  html += '  <div class="pet-card-title">🐾 Dados do Pet</div>';
+} else {
   html += '  <div class="pet-card-title">🐾 Pet ' + idx + '</div>';
-  if (idx > 1) {
-    html += '  <button type="button" class="btn-remove-pet" onclick="removerPet(' + idx + ')">✕ Remover</button>';
-  }
-  html += '</div>';
+}
+
+// botão remover só a partir do segundo pet
+if (idx > 1) {
+  html += '  <button type="button" class="btn-remove-pet" onclick="removerPet(' + idx + ')">✕ Remover</button>';
+}
+
+html += '</div>';
 
   html += '<div class="grid-2">';
 
