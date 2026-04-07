@@ -835,15 +835,11 @@ html += '</div>';
 
   html += '<div class="field">';
   html += '  <label>espécie <span class="required">*</span></label>';
-  html += '  <select id="pet-espécie-' + idx + '" onchange="atualizarRacas(' + idx + ')">';
-  html += '    <option value="">Selecione...</option>';
-  html += '    <option value="cao">Cao</option>';
-  html += '    <option value="gato">Gato</option>';
-  html += '    <option value="ave">Ave</option>';
-  html += '    <option value="roedor">Roedor</option>';
-  html += '    <option value="reptil">Reptil</option>';
-  html += '    <option value="outro">Outro</option>';
-  html += '  </select>';
+html += '  <select id="pet-especie-' + idx + '" onchange="atualizarRacas(' + idx + ')">';
+html += '    <option value="">Selecione...</option>';
+html += '    <option value="cao">Cao</option>';
+html += '    <option value="gato">Gato</option>';
+html += '  </select>';
   html += '  <span class="error-msg" id="err-pet-espécie-' + idx + '">Selecione a espécie.</span>';
   html += '</div>';
 
