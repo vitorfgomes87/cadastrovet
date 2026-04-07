@@ -911,20 +911,25 @@ function adicionarPet() {
   html += '<span class="error-msg" id="err-pet-raca-' + idx + '">Selecione a raça.</span>';
   html += '</div>';
 
-  // CAMPO IDADE (anos + meses) com hint de nascimento
-  html += '<div class="field">';
-  html += '<label>Idade <span class="required">*</span></label>';
-  html += '<div style="display:flex; gap:8px;">';
-  html += '  <div style="flex:1;">';
-  html += '    <input type="number" id="pet-anos-' + idx + '" placeholder="Anos" min="0" max="30" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
-  html += '  </div>';
-  html += '  <div style="flex:1;">';
-  html += '    <input type="number" id="pet-meses-' + idx + '" placeholder="Meses" min="0" max="11" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
-  html += '  </div>';
-  html += '</div>';
-  html += '<div class="idade-hint" id="pet-nasc-hint-' + idx + '"></div>';
-  html += '<span class="error-msg" id="err-pet-idade-' + idx + '">Informe a idade do pet.</span>';
-  html += '</div>';
+  // CAMPO IDADE (anos + meses) com labels claros
+html += '<div class="field">';
+html += '<label>Idade <span class="required">*</span></label>';
+html += '<div style="display:flex; gap:8px;">';
+
+html += '  <div style="flex:1;">';
+html += '    <label style="font-size:11px; font-weight:600; color:#555; display:block; margin-bottom:2px;">Anos</label>';
+html += '    <input type="number" id="pet-anos-' + idx + '" placeholder="" min="0" max="30" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
+html += '  </div>';
+
+html += '  <div style="flex:1;">';
+html += '    <label style="font-size:11px; font-weight:600; color:#555; display:block; margin-bottom:2px;">Meses</label>';
+html += '    <input type="number" id="pet-meses-' + idx + '" placeholder="" min="0" max="11" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
+html += '  </div>';
+
+html += '</div>';
+html += '<div class="idade-hint" id="pet-nasc-hint-' + idx + '"></div>';
+html += '<span class="error-msg" id="err-pet-idade-' + idx + '">Informe a idade do pet.</span>';
+html += '</div>';
 
   html += '<div class="field">';
   html += '<label>Sexo <span class="required">*</span></label>';
