@@ -140,11 +140,7 @@
       <button class="tab-btn" id="tab-btn-pets"><span class="tab-icon">🐾</span> Meu Pet</button>
     </div>
 
-    <!-- TROQUE SEU_ID_AQUI PELO ID DO FORMSPREE -->
     <form id="mainForm" method="POST" action="https://script.google.com/macros/s/AKfycbw4B00tjW3fOMECXl3fBDrBhL4tATRnkvGG3TGCuCbdusB-Nj31-2yP5O7FO8h8L92Hkw/exec">
-      <input type="hidden" name="_subject" value="Novo cadastro - Univet Centro Veterinário 24h">
-      <input type="hidden" name="dadosTutor" id="dadosTutor">
-      <input type="hidden" name="dadosPets" id="dadosPets">
 
       <!-- ABA TUTOR -->
       <div id="tab-tutor" class="tab-content active">
@@ -303,7 +299,6 @@
 // =========================
 // LISTAS DE RAÇAS
 // =========================
-// Listas com SRD sempre em primeiro
 var racasCaes = (function() {
   var lista = [
     "Labrador Retriever","Golden Retriever","Bulldog Ingles",
@@ -406,8 +401,8 @@ document.getElementById('telefone2').addEventListener('input', function() {
 });
 
 document.getElementById('cep').addEventListener('input', function() {
-  var v = this.value.replace(/\D/g, '').substring(0, 8);
   this.value = mascaraCEP(this.value);
+  var v = this.value.replace(/\D/g, '');
   if (v.length === 8) {
     buscarCep(v);
   }
@@ -417,14 +412,10 @@ document.getElementById('cep').addEventListener('input', function() {
 // BUSCA CEP (ViaCEP)
 // =========================
 function buscarCep(cep) {
-  var url = 'https://viacep.com.br/ws/' + cep + '/json/';
-  fetch(url)
+  fetch('https://viacep.com.br/ws/' + cep + '/json/')
     .then(function(res) { return res.json(); })
     .then(function(data) {
-      if (data.erro) {
-        showToast('CEP não encontrado.', 'erro');
-        return;
-      }
+      if (data.erro) { showToast('CEP não encontrado.', 'erro'); return; }
       var mapa = {
         logradouro: data.logradouro,
         bairro:     data.bairro,
@@ -470,14 +461,12 @@ function calcularNascimentoPet(idx) {
   hoje.setFullYear(hoje.getFullYear() - anos);
   hoje.setMonth(hoje.getMonth() - meses);
 
-  var dd  = String(hoje.getDate()).padStart(2, '0');
-  var mm  = String(hoje.getMonth() + 1).padStart(2, '0');
+  var dd   = String(hoje.getDate()).padStart(2, '0');
+  var mm   = String(hoje.getMonth() + 1).padStart(2, '0');
   var aaaa = hoje.getFullYear();
 
-  var dataFormatada = dd + '/' + mm + '/' + aaaa;
-  hintEl.textContent = 'Nascimento aproximado: ' + dataFormatada;
-
-  return aaaa + '-' + mm + '-' + dd; // formato para salvar
+  hintEl.textContent = 'Nascimento aproximado: ' + dd + '/' + mm + '/' + aaaa;
+  return aaaa + '-' + mm + '-' + dd;
 }
 
 // =========================
@@ -615,14 +604,13 @@ function validarPets() {
       }
     });
 
-    // Valida idade: anos ou meses deve ser maior que 0
     var anosEl  = document.getElementById('pet-anos-'  + idx);
     var mesesEl = document.getElementById('pet-meses-' + idx);
     var anosErr = document.getElementById('err-pet-idade-' + idx);
     var anos    = parseInt((anosEl  || {}).value) || 0;
     var meses   = parseInt((mesesEl || {}).value) || 0;
 
-    if (anosEl) anosEl.classList.remove('error');
+    if (anosEl)  anosEl.classList.remove('error');
     if (mesesEl) mesesEl.classList.remove('error');
     if (anosErr) anosErr.classList.remove('show');
 
@@ -632,6 +620,7 @@ function validarPets() {
       if (anosErr) { anosErr.textContent = 'Informe a idade do pet.'; anosErr.classList.add('show'); }
       ok = false;
     }
+
     var selects2 = [
       { id: 'pet-especie-' + idx, msg: 'Selecione a espécie.' },
       { id: 'pet-sexo-'    + idx, msg: 'Selecione o sexo.' }
@@ -655,7 +644,7 @@ function validarPets() {
     if (pesoErr) pesoErr.classList.remove('show');
     if (pesoEl && (!pesoEl.value || parseFloat(pesoEl.value) <= 0)) {
       pesoEl.classList.add('error');
-      if (pesoErr) { pesoErr.textContent = 'Pese o Pet na balança e registre aqui (kg):'; pesoErr.classList.add('show'); }
+      if (pesoErr) { pesoErr.textContent = 'Informe o peso.'; pesoErr.classList.add('show'); }
       ok = false;
     }
 
@@ -672,18 +661,16 @@ function validarPets() {
       }
     }
 
-    ['castrado'].forEach(function(campo) {
-      var marcado = document.querySelector('input[name="' + campo + '-' + idx + '"]:checked');
-      var grupo   = document.getElementById(campo + '-group-' + idx);
-      var errEl   = document.getElementById('err-' + campo + '-' + idx);
-      if (grupo) grupo.classList.remove('error');
-      if (errEl) errEl.classList.remove('show');
-      if (!marcado) {
-        if (grupo) grupo.classList.add('error');
-        if (errEl) errEl.classList.add('show');
-        ok = false;
-      }
-    });
+    var marcado = document.querySelector('input[name="castrado-' + idx + '"]:checked');
+    var grupo   = document.getElementById('castrado-group-' + idx);
+    var errEl   = document.getElementById('err-castrado-' + idx);
+    if (grupo) grupo.classList.remove('error');
+    if (errEl) errEl.classList.remove('show');
+    if (!marcado) {
+      if (grupo) grupo.classList.add('error');
+      if (errEl) errEl.classList.add('show');
+      ok = false;
+    }
   });
 
   return ok;
@@ -740,7 +727,7 @@ function coletarPets() {
 }
 
 // =========================
-// ENVIO
+// ENVIO — CORRIGIDO
 // =========================
 function enviarFormulario() {
   if (!validarPets()) {
@@ -757,19 +744,19 @@ function enviarFormulario() {
   btn.disabled    = true;
   btn.textContent = 'Enviando...';
 
-  var tutor = coletarTutor();
-  var pets  = coletarPets();
-
+  var tutor   = coletarTutor();
+  var pets    = coletarPets();
   var payload = JSON.stringify({ tutor: tutor, pets: pets });
   var url     = document.getElementById('mainForm').action;
 
   fetch(url, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body:    payload
+    method: 'POST',
+    body:   payload
   })
-  .then(function(res) { return res.json(); })
-  .then(function(data) {
+  .then(function(res) { return res.text(); })
+  .then(function(text) {
+    var data;
+    try { data = JSON.parse(text); } catch(e) { data = {}; }
     if (data.resultado === 'ok') {
       try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
       document.getElementById('abas').style.display     = 'none';
@@ -778,13 +765,13 @@ function enviarFormulario() {
     } else {
       showToast('Erro ao enviar. Tente novamente.', 'erro');
       btn.disabled    = false;
-      btn.textContent = 'Enviar Cadastro';
+      btn.textContent = '✔ Enviar Cadastro';
     }
   })
   .catch(function() {
     showToast('Sem conexão. Verifique o Wi-Fi.', 'erro');
     btn.disabled    = false;
-    btn.textContent = 'Enviar Cadastro';
+    btn.textContent = '✔ Enviar Cadastro';
   });
 }
 
@@ -802,7 +789,7 @@ function novoCadastro() {
   document.getElementById('mainForm').style.display = '';
   document.getElementById('tela-sucesso').classList.remove('show');
   document.getElementById('btn-enviar').disabled    = false;
-  document.getElementById('btn-enviar').textContent = 'Enviar Cadastro';
+  document.getElementById('btn-enviar').textContent = '✔ Enviar Cadastro';
   document.getElementById('pets-container').innerHTML = '';
   petCount = 0;
   adicionarPet();
@@ -850,14 +837,12 @@ function adicionarPet() {
 
   html += '<div class="grid-2">';
 
-  // Nome
   html += '<div class="field">';
   html += '<label>Nome do pet <span class="required">*</span></label>';
   html += '<input type="text" id="pet-nome-' + idx + '" placeholder="Nome" />';
   html += '<span class="error-msg" id="err-pet-nome-' + idx + '">Informe o nome do pet.</span>';
   html += '</div>';
 
-  // Espécie
   html += '<div class="field">';
   html += '<label>Espécie <span class="required">*</span></label>';
   html += '<select id="pet-especie-' + idx + '" onchange="atualizarRacas(' + idx + ')">';
@@ -868,14 +853,12 @@ function adicionarPet() {
   html += '<span class="error-msg" id="err-pet-especie-' + idx + '">Selecione a espécie.</span>';
   html += '</div>';
 
-  // Raça (alinhada normalmente)
   html += '<div class="field racas-container" id="raca-wrapper-' + idx + '">';
   html += '<label>Raça <span class="required">*</span></label>';
   html += '<select id="pet-raca-' + idx + '"><option value="">Selecione a espécie primeiro</option></select>';
   html += '<span class="error-msg" id="err-pet-raca-' + idx + '">Selecione a raça.</span>';
   html += '</div>';
 
-  // Sexo
   html += '<div class="field">';
   html += '<label>Sexo <span class="required">*</span></label>';
   html += '<select id="pet-sexo-' + idx + '">';
@@ -887,35 +870,29 @@ function adicionarPet() {
   html += '<span class="error-msg" id="err-pet-sexo-' + idx + '">Selecione o sexo.</span>';
   html += '</div>';
 
-  // Cor
   html += '<div class="field">';
   html += '<label>Cor / Pelagem <span class="required">*</span></label>';
   html += '<input type="text" id="pet-cor-' + idx + '" placeholder="Ex: Caramelo, Preto e branco..." />';
   html += '<span class="error-msg" id="err-pet-cor-' + idx + '">Informe a cor/pelagem.</span>';
   html += '</div>';
 
-  // Peso
   html += '<div class="field">';
-  html += '<label>Pese o Pet na balança e registre aqui (kg):<span class="required">*</span></label>';
-  html += '<input type="number" id="pet-peso-' + idx + '" placeholder="Exemplo: 2,5 kg" min="0.1" step="0.1" />';
+  html += '<label>Pese o Pet na balança e registre aqui (kg): <span class="required">*</span></label>';
+  html += '<input type="number" id="pet-peso-' + idx + '" placeholder="Exemplo: 2.5" min="0.1" step="0.1" />';
   html += '<span class="error-msg" id="err-pet-peso-' + idx + '">Informe o peso.</span>';
   html += '</div>';
 
-  // Idade (Anos / Meses) – alinhada também na grid
   html += '<div class="field">';
   html += '<label>Idade <span class="required">*</span></label>';
   html += '<div style="display:flex; gap:8px;">';
-
   html += '  <div style="flex:1;">';
   html += '    <label style="font-size:11px; font-weight:600; color:#555; display:block; margin-bottom:2px;">Anos</label>';
-  html += '    <input type="number" id="pet-anos-' + idx + '" placeholder="" min="0" max="30" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
+  html += '    <input type="number" id="pet-anos-' + idx + '" placeholder="0" min="0" max="30" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
   html += '  </div>';
-
   html += '  <div style="flex:1;">';
   html += '    <label style="font-size:11px; font-weight:600; color:#555; display:block; margin-bottom:2px;">Meses</label>';
-  html += '    <input type="number" id="pet-meses-' + idx + '" placeholder="" min="0" max="11" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
+  html += '    <input type="number" id="pet-meses-' + idx + '" placeholder="0" min="0" max="11" style="width:100%;" oninput="calcularNascimentoPet(' + idx + ')" />';
   html += '  </div>';
-
   html += '</div>';
   html += '<div class="idade-hint" id="pet-nasc-hint-' + idx + '"></div>';
   html += '<span class="error-msg" id="err-pet-idade-' + idx + '">Informe a idade do pet.</span>';
@@ -925,7 +902,6 @@ function adicionarPet() {
 
   html += '<div style="margin-top:20px;"></div>';
 
-  // Castrado
   html += '<div class="field" style="margin-bottom:16px;">';
   html += '<label>Castrado(a)? <span class="required">*</span></label>';
   html += '<div class="radio-group" id="castrado-group-' + idx + '">';
@@ -939,6 +915,7 @@ function adicionarPet() {
   div.innerHTML = html;
   document.getElementById('pets-container').appendChild(div);
 }
+
 function removerPet(idx) {
   var card = document.getElementById('pet-card-' + idx);
   if (card) card.remove();
