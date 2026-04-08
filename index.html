@@ -141,7 +141,7 @@
     </div>
 
     <!-- TROQUE SEU_ID_AQUI PELO ID DO FORMSPREE -->
-    <form id="mainForm" method="POST" action="https://formspree.io/f/mdapwpoo">
+    <form id="mainForm" method="POST" action="https://script.google.com/macros/s/AKfycbw4B00tjW3fOMECXl3fBDrBhL4tATRnkvGG3TGCuCbdusB-Nj31-2yP5O7FO8h8L92Hkw/exec">
       <input type="hidden" name="_subject" value="Novo cadastro - Univet Centro Veterinário 24h">
       <input type="hidden" name="dadosTutor" id="dadosTutor">
       <input type="hidden" name="dadosPets" id="dadosPets">
@@ -760,55 +760,17 @@ function enviarFormulario() {
   var tutor = coletarTutor();
   var pets  = coletarPets();
 
-  var textoTutor = 'TUTOR\n';
-  textoTutor += 'Nome: '          + tutor.nome      + '\n';
-  textoTutor += 'CPF: '           + tutor.cpf       + '\n';
-  textoTutor += 'RG: '            + tutor.rg        + '\n';
-  textoTutor += 'Nascimento: '    + tutor.nascimento + '\n';
-  textoTutor += 'Genero: '        + tutor.genero    + '\n';
-  textoTutor += 'Email: '         + tutor.email     + '\n';
-  textoTutor += 'Telefone: '      + tutor.telefone  + '\n';
-  textoTutor += 'Tel. alt.: '     + (tutor.telefone2 || '—') + '\n';
-  textoTutor += 'Endereco: '      + tutor.logradouro + ', ' + tutor.numero;
-  if (tutor.complemento) textoTutor += ' ' + tutor.complemento;
-  textoTutor += ' — ' + tutor.bairro + ', ' + tutor.cidade + '/' + tutor.estado + ' — CEP ' + tutor.cep + '\n';
-  textoTutor += 'Como conheceu: ' + tutor.origem + '\n';
+  var payload = JSON.stringify({ tutor: tutor, pets: pets });
+  var url     = document.getElementById('mainForm').action;
 
-  var textoPets = '';
-  pets.forEach(function(p, i) {
-    var idadeTexto = '';
-    if (parseInt(p.anos) > 0 && parseInt(p.meses) > 0) {
-      idadeTexto = p.anos + ' ano(s) e ' + p.meses + ' mes(es)';
-    } else if (parseInt(p.anos) > 0) {
-      idadeTexto = p.anos + ' ano(s)';
-    } else {
-      idadeTexto = p.meses + ' mes(es)';
-    }
-
-    textoPets += 'PET ' + (i + 1) + ': ' + p.nome            + '\n';
-    textoPets += 'Especie: '              + p.especie         + '\n';
-    textoPets += 'Raca: '                 + (p.raca || '—')   + '\n';
-    textoPets += 'Idade: '                + idadeTexto        + '\n';
-    textoPets += 'Nascimento aprox.: '    + (p.nascimento ? p.nascimento.split('-').reverse().join('/') : '—') + '\n';
-    textoPets += 'Sexo: '                 + p.sexo            + '\n';
-    textoPets += 'Cor/Pelagem: '          + p.cor             + '\n';
-    textoPets += 'Peso: '                 + p.peso + ' kg'    + '\n';
-    textoPets += 'Castrado(a): '          + p.castrado        + '\n\n';
-  });
-
-  document.getElementById('dadosTutor').value = textoTutor;
-  document.getElementById('dadosPets').value  = textoPets;
-
-  var form     = document.getElementById('mainForm');
-  var formData = new FormData(form);
-
-  fetch(form.action, {
+  fetch(url, {
     method:  'POST',
-    headers: { 'Accept': 'application/json' },
-    body:    formData
+    headers: { 'Content-Type': 'application/json' },
+    body:    payload
   })
-  .then(function(res) {
-    if (res.ok) {
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    if (data.resultado === 'ok') {
       try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
       document.getElementById('abas').style.display     = 'none';
       document.getElementById('mainForm').style.display = 'none';
